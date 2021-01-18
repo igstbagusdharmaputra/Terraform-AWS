@@ -391,11 +391,11 @@ resource "aws_instance" "public" {
     Name = "public"
   }
   root_block_device {
-    delete_on_termination = true
-    encrypted             = false
-    iops                  = 100
+#    delete_on_termination = true
+#    encrypted             = false
+#    iops                  = 100
     volume_size           = 15
-    volume_type           = "gp2"
+#    volume_type           = "gp2"
   }
 }
 
@@ -417,11 +417,11 @@ resource "aws_instance" "frontend" {
     Name = "frontend"
   }
   root_block_device {
-    delete_on_termination = true
-    encrypted             = false
-    iops                  = 100
+#    delete_on_termination = true
+#    encrypted             = false
+#    iops                  = 100
     volume_size           = 12
-    volume_type           = "gp2"
+#    volume_type           = "gp2"
   }
 }
 
@@ -439,11 +439,11 @@ resource "aws_instance" "Backend" {
     Name = "backend"
   }
   root_block_device {
-    delete_on_termination = true
-    encrypted             = false
-    iops                  = 100
+#    delete_on_termination = true
+#    encrypted             = false
+#    iops                  = 100
     volume_size           = 12
-    volume_type           = "gp2"
+#    volume_type           = "gp2"
   }
 }
 # Instance Jenkins
@@ -457,14 +457,14 @@ resource "aws_instance" "jenkins" {
   private_ip        = "10.10.2.64"
   security_groups   = [aws_security_group.jenkins.id]
   tags = {
-    Name = "backend"
+    Name = "jenkins"
   }
   root_block_device {
-    delete_on_termination = true
-    encrypted             = false
-    iops                  = 100
+#    delete_on_termination = true
+#    encrypted             = false
+#    iops                  = 100
     volume_size           = 12
-    volume_type           = "gp2"
+#    volume_type           = "gp2"
   }
 }
 
@@ -479,14 +479,14 @@ resource "aws_instance" "database" {
   private_ip        = "10.10.2.223"
   security_groups   = [aws_security_group.database.id]
   tags = {
-    Name = "backend"
+    Name = "database"
   }
   root_block_device {
-    delete_on_termination = true
-    encrypted             = false
-    iops                  = 100
+#    delete_on_termination = true
+#    encrypted             = false
+#    iops                  = 100
     volume_size           = 12
-    volume_type           = "gp2"
+#    volume_type           = "gp2"
   }
 }
 
@@ -502,14 +502,14 @@ resource "aws_instance" "monitoring" {
   private_ip        = "10.10.2.68"
   security_groups   = [aws_security_group.monitoring.id]
   tags = {
-    Name = "backend"
+    Name = "monitoring"
   }
   root_block_device {
-    delete_on_termination = true
-    encrypted             = false
-    iops                  = 100
+#    delete_on_termination = true
+#    encrypted             = false
+#    iops                  = 100
     volume_size           = 12
-    volume_type           = "gp2"
+#    volume_type           = "gp2"
   }
 }
 
