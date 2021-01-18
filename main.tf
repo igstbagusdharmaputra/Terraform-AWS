@@ -374,15 +374,19 @@ resource "aws_security_group" "monitoring" {
       Description = "Security Group Monitoring"
    }
 }
+
+
+
+
 # Instance Public
 resource "aws_instance" "public" {
   ami               = "ami-00ddb0e5626798373"
   instance_type     = "t2.medium"
   source_dest_check = false
-  key_name          = "bruh"
-  subnet_id         = "subnet-05b40422a2186ed88"
-  private_ip        = "172.31.1.30"
-  security_groups   = aws_security_group.public-sec.*.id
+  key_name          = aws_key_pair.ssh.key_name
+  subnet_id         = aws_subnet.public.id
+  private_ip        = "10.10.1.36"
+  security_groups   = [aws_security_group.public.id]
   tags = {
     Name = "public"
   }
@@ -394,3 +398,118 @@ resource "aws_instance" "public" {
     volume_type           = "gp2"
   }
 }
+
+resource "aws_eip" "lb" {
+   instance = aws_instance.public.id
+}
+
+# Instance Frontend
+resource "aws_instance" "frontend" {
+  ami               = "ami-00ddb0e5626798373"
+  instance_type     = "t2.small"
+  associate_public_ip_address = false
+  source_dest_check = false
+  key_name          = aws_key_pair.ssh.key_name
+  subnet_id         = aws_subnet.private.id
+  private_ip        = "10.10.2.220"
+  security_groups   = [aws_security_group.frontend.id]
+  tags = {
+    Name = "frontend"
+  }
+  root_block_device {
+    delete_on_termination = true
+    encrypted             = false
+    iops                  = 100
+    volume_size           = 12
+    volume_type           = "gp2"
+  }
+}
+
+# Instance Backend
+resource "aws_instance" "Backend" {
+  ami               = "ami-00ddb0e5626798373"
+  instance_type     = "t2.small"
+  associate_public_ip_address = false
+  source_dest_check = false
+  key_name          = aws_key_pair.ssh.key_name
+  subnet_id         = aws_subnet.private.id
+  private_ip        = "10.10.2.60"
+  security_groups   = [aws_security_group.backend.id]
+  tags = {
+    Name = "backend"
+  }
+  root_block_device {
+    delete_on_termination = true
+    encrypted             = false
+    iops                  = 100
+    volume_size           = 12
+    volume_type           = "gp2"
+  }
+}
+# Instance Jenkins
+resource "aws_instance" "jenkins" {
+  ami               = "ami-00ddb0e5626798373"
+  instance_type     = "t2.medium"
+  associate_public_ip_address = false
+  source_dest_check = false
+  key_name          = aws_key_pair.ssh.key_name
+  subnet_id         = aws_subnet.private.id
+  private_ip        = "10.10.2.64"
+  security_groups   = [aws_security_group.jenkins.id]
+  tags = {
+    Name = "backend"
+  }
+  root_block_device {
+    delete_on_termination = true
+    encrypted             = false
+    iops                  = 100
+    volume_size           = 12
+    volume_type           = "gp2"
+  }
+}
+
+# Instance Database
+resource "aws_instance" "jenkins" {
+  ami               = "ami-00ddb0e5626798373"
+  instance_type     = "t2.medium"
+  associate_public_ip_address = false
+  source_dest_check = false
+  key_name          = aws_key_pair.ssh.key_name
+  subnet_id         = aws_subnet.private.id
+  private_ip        = "10.10.2.223"
+  security_groups   = [aws_security_group.database.id]
+  tags = {
+    Name = "backend"
+  }
+  root_block_device {
+    delete_on_termination = true
+    encrypted             = false
+    iops                  = 100
+    volume_size           = 12
+    volume_type           = "gp2"
+  }
+}
+
+
+# Instance Monitoring
+resource "aws_instance" "monitoring" {
+  ami               = "ami-00ddb0e5626798373"
+  instance_type     = "t2.small"
+  associate_public_ip_address = false
+  source_dest_check = false
+  key_name          = aws_key_pair.ssh.key_name
+  subnet_id         = aws_subnet.private.id
+  private_ip        = "10.10.2.68"
+  security_groups   = [aws_security_group.monitoring.id]
+  tags = {
+    Name = "backend"
+  }
+  root_block_device {
+    delete_on_termination = true
+    encrypted             = false
+    iops                  = 100
+    volume_size           = 12
+    volume_type           = "gp2"
+  }
+}
+
