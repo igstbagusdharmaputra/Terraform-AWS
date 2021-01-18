@@ -51,23 +51,23 @@ resource "aws_subnet" "private" {
 
 #key pair
 
-resource "tls_private_key" "ssh" {
-  algorithm = "RSA"
-  rsa_bits = 4096
-}
+#resource "tls_private_key" "ssh" {
+#  algorithm = "RSA"
+#  rsa_bits = 4096
+#}
 
-resource "aws_key_pair" "ssh" {
-  key_name = "FinalKey"
-  public_key = tls_private_key.ssh.public_key_openssh
-}
+#resource "aws_key_pair" "ssh" {
+#  key_name = "FinalKey"
+#  public_key = tls_private_key.ssh.public_key_openssh
+#}
 
-output "ssh_private_key_pem" {
- value = tls_private_key.ssh.private_key_pem
-}
+#output "ssh_private_key_pem" {
+# value = tls_private_key.ssh.private_key_pem
+#}
 
-output "ssh_public_key_pem" {
- value = tls_private_key.ssh.public_key_pem
-}
+#output "ssh_public_key_pem" {
+# value = tls_private_key.ssh.public_key_pem
+#}
 
 
 
@@ -383,7 +383,7 @@ resource "aws_instance" "public" {
   ami               = "ami-00ddb0e5626798373"
   instance_type     = "t2.medium"
   source_dest_check = false
-  key_name          = aws_key_pair.ssh.key_name
+  key_name          = "FinalKey"
   subnet_id         = aws_subnet.public.id
   private_ip        = "10.10.1.36"
   security_groups   = [aws_security_group.public.id]
@@ -409,7 +409,7 @@ resource "aws_instance" "frontend" {
   instance_type     = "t2.small"
   associate_public_ip_address = false
   source_dest_check = false
-  key_name          = aws_key_pair.ssh.key_name
+  key_name          = "FinalKey"
   subnet_id         = aws_subnet.private.id
   private_ip        = "10.10.2.220"
   security_groups   = [aws_security_group.frontend.id]
@@ -431,7 +431,7 @@ resource "aws_instance" "Backend" {
   instance_type     = "t2.small"
   associate_public_ip_address = false
   source_dest_check = false
-  key_name          = aws_key_pair.ssh.key_name
+  key_name          = "FinalKey"
   subnet_id         = aws_subnet.private.id
   private_ip        = "10.10.2.60"
   security_groups   = [aws_security_group.backend.id]
@@ -452,7 +452,7 @@ resource "aws_instance" "jenkins" {
   instance_type     = "t2.medium"
   associate_public_ip_address = false
   source_dest_check = false
-  key_name          = aws_key_pair.ssh.key_name
+  key_name          = "FinalKey"
   subnet_id         = aws_subnet.private.id
   private_ip        = "10.10.2.64"
   security_groups   = [aws_security_group.jenkins.id]
@@ -469,12 +469,12 @@ resource "aws_instance" "jenkins" {
 }
 
 # Instance Database
-resource "aws_instance" "jenkins" {
+resource "aws_instance" "database" {
   ami               = "ami-00ddb0e5626798373"
   instance_type     = "t2.medium"
   associate_public_ip_address = false
   source_dest_check = false
-  key_name          = aws_key_pair.ssh.key_name
+  key_name          = "FinalKey"
   subnet_id         = aws_subnet.private.id
   private_ip        = "10.10.2.223"
   security_groups   = [aws_security_group.database.id]
@@ -497,7 +497,7 @@ resource "aws_instance" "monitoring" {
   instance_type     = "t2.small"
   associate_public_ip_address = false
   source_dest_check = false
-  key_name          = aws_key_pair.ssh.key_name
+  key_name          = "FinalKey"
   subnet_id         = aws_subnet.private.id
   private_ip        = "10.10.2.68"
   security_groups   = [aws_security_group.monitoring.id]
